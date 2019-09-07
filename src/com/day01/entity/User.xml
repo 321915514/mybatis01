@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.day01.dao.UserDao">
+<!-- 使用二级缓存 -->
+		<cache></cache>
+
+	<!-- public User getUser(); -->
+	<select id="getUser" resultType="com.day01.entity.User">
+		select * from test where id=#{id}
+	</select>
+	
+	<!-- 
+		public User getUser(Integer id);
+		public int addUser(User user);
+		public int updateUser(User user);
+		public boolean deleteUser(Integer id);
+	
+	 -->
+	<insert id="addUser">
+		insert into test(username,password,sex) values(#{username},#{password},#{sex})
+	</insert>
+	
+	<update id="updateUser">
+		update test set username=#{username},password=#{password},sex=#{sex} where id=#{id}
+	</update>
+	<delete id="deleteUser">
+	
+		delete from test where id=#{id}
+	
+	</delete>
+	<!-- public List<User> findAll(); -->
+	
+	<select id="findAll" resultType="com.day01.entity.User">
+		select * from test
+	</select>
+	
+	<select id="findByMap" resultType="com.day01.entity.User">
+		select * from test
+	</select>
+	<!-- public List<User> findBydongtai(); -->
+	<select id="findBydongtai" resultMap="Userlist">
+		select * from test
+		<where>
+			<if test="id!=null">
+				 id>#{id} 
+				
+			</if>
+			<if test="username!=null and ! username.equals(&quot;&quot;)">
+				 and username like #{username}
+				
+			</if>
+			<if test="password!=null">
+				and password=#{password}
+			</if>
+			<if test="sex!=null">
+				and sex=#{sex}
+			</if>
+		</where>
+	
+	</select>
+	<resultMap type="com.day01.entity.User" id="Userlist">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="sex" column="sex"/>
+	</resultMap>
+
+
+
+</mapper>
